@@ -19,14 +19,15 @@ togo install togo-framework/data
 <!-- /togo-header -->
 
 togo's **data** capability — a uniform `Query` interface over a pluggable source.
-The built-in **`pg`** backend queries the app's Postgres (the
-[db](https://github.com/togo-framework/db) superpowers image), so **`pg_analytics`
-(OLAP)** and **`pg_search` (BM25)** come for free — no separate engine. Federation
+The built-in **`sql`** backend queries the app's own database on any driver
+(SQLite, Postgres, MySQL). On the [db](https://github.com/togo-framework/db)
+superpowers image, **`pg_analytics` (OLAP)** and **`pg_search` (BM25)** come for
+free — no separate engine. (`pg`, its old name, still selects it.) Federation
 backends query external sources:
 
 | Backend | Repo |
 |---|---|
-| pg *(default)* | built in |
+| sql *(default)* | built in |
 | BigQuery | `togo-framework/data-bigquery` |
 | Databricks SQL | `togo-framework/data-databricks` |
 | Apache Iceberg | `togo-framework/data-iceberg` |
