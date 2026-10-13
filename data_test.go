@@ -31,12 +31,22 @@ func TestScanRows(t *testing.T) {
 	}
 }
 
-func TestFromKernelDefaultsToPg(t *testing.T) {
+func TestFromKernelDefaultsToSQL(t *testing.T) {
 	d := FromKernel(togo.New())
 	if d == nil {
 		t.Fatal("no data backend registered")
 	}
-	if _, ok := d.(*pgData); !ok {
-		t.Fatalf("default should be pgData, got %T", d)
+	if _, ok := d.(*sqlData); !ok {
+		t.Fatalf("default should be sqlData, got %T", d)
+	}
+}
+
+// The default backend queries the app's database on any driver, so it is not
+// named after Postgres (it logged backend=pg on SQLite); "pg" still selects it.
+func TestDefaultBackendName(t *testing.T) {
+	for active, want := range map[string]string{"": "sql", "sql": "sql", "pg": "pg", "bigquery": "sql"} {
+		if got := defaultBackend(active); got != want {
+			t.Errorf("defaultBackend(%q) = %q, want %q", active, got, want)
+		}
 	}
 }

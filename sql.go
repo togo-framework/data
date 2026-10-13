@@ -7,12 +7,13 @@ import (
 	"github.com/togo-framework/togo"
 )
 
-// pgData queries the app's Postgres via the kernel. Because the togo db image is
-// ParadeDB, OLAP (pg_analytics) and BM25 search (pg_search) are available through
-// the same connection — no separate engine. This is the default `data` backend.
-type pgData struct{ k *togo.Kernel }
+// sqlData queries the app's own database through the kernel, whatever its driver
+// (SQLite, Postgres, MySQL). On the togo db image (ParadeDB) OLAP (pg_analytics)
+// and BM25 search (pg_search) come through the same connection — no separate
+// engine. This is the default `data` backend.
+type sqlData struct{ k *togo.Kernel }
 
-func (p *pgData) Query(ctx context.Context, query string, args ...any) ([]Row, error) {
+func (p *sqlData) Query(ctx context.Context, query string, args ...any) ([]Row, error) {
 	db, err := p.k.SQL(ctx)
 	if err != nil {
 		return nil, err
